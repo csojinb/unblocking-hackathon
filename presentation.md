@@ -15,3 +15,15 @@
 * Put your project out there
 
 ---
+
+# Scope
+### Start small, so you can start building
+
+---
+
+## A story
+
+* Something hackathon
+
+![right fit](images/xkcd-tasks.png)
+
