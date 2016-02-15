@@ -1,14 +1,14 @@
 <!doctype html>
 <html>
 <head>
-	<title>Who Said What?</title>
+	<title>Automatic Keywords Highlighter</title>
 	<script src="common.js"></script>
-	<script src="popup.js"></script>
+	<script src="options.js"></script>
 	<link rel="stylesheet" href="common.css" />
 </head>
-<body id="popup">
+<body id="options">
 
-<h1>Who Said What?</h1>
+<h1>Automatic Keywords Highlighter Options</h1>
 
 <h2>Keywords</h2>
 <p>Which keywords should be highlighted?</p>
@@ -21,8 +21,11 @@
 <p><input id="colorBackground" type="color" /> <label for="colorBackground">Background color</label>
 	<em>&nbsp;</em></p>
 
+<h2>More options</h2>
+<p><input id="checkboxShowOccurrences" type="checkbox" /> <label for="checkboxShowOccurrences">Show number of found keywords in toolbar icon.</label></p>
+
 <br />
-<button id="buttonSave" type="submit">Analyze!</button>
+<button id="buttonSave" type="submit">Save</button> &nbsp;&nbsp;&nbsp; <button id="buttonReset" type="reset">Reset</button>
 
 </body>
 </html>
