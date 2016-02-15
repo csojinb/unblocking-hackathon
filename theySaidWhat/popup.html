@@ -4,14 +4,25 @@
   <title>WhoSaidWhat</title>
   <script src="common.js"></script>
   <script src="popup.js"></script>
+  <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body id="popup">
   <h1>WhoSaidWhat</h1>
-  <div id="genderCount"></div>
-
+  <table class="pure-table hist">
+    <thead>
+      <tr>
+        <th>Gender</th>
+        <th>Count</th>
+      </tr>
+    </thead>
+  </table>
   <br />
-  <p><input id="checkboxHighlightGender" type="checkbox" /><label for="checkboxHighlightGender">show highlighting</label></p>
-
+  <h2>Highlighting</h2>
+  <p><label for="checkboxHighlightGender"><input id="checkboxHighlightGender" type="checkbox" />show highlighting</label></p>
+  <p><b>Colors</b></p>
+  <p><input id="colorForeground" type="color" /> <label for="colorForeground">Text color</label></p>
+  <p><input id="colorBackground" type="color" /> <label for="colorBackground">Background color</label>
   <br />
 </body>
 </html>
