@@ -12,11 +12,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
             chrome.tabs.sendMessage(tabs[0].id, {
               "message": "returnOptions",
-              "remove": request.remove,
-              "keywords": localStorage.getItem("keywords"),
-              "foreground": localStorage.getItem("foreground") || "#000000",
-              "background": localStorage.getItem("background") || "#ffff00",
-              "highlightGender": highlightGender
+              "remove": request.remove
             });
           }
         }
