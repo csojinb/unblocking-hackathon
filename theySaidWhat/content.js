@@ -1,4 +1,4 @@
-function keywordsHighlighter(options, remove) {
+function keywordsHighlighter(remove) {
 	var occurrences = 0;
 
 	// Based on "highlight: JavaScript text higlighting jQuery plugin" by Johann Burkard.
@@ -7,7 +7,6 @@ function keywordsHighlighter(options, remove) {
 	function highlight(node, pos, keyword, options) {
 		var span = document.createElement("span");
 		span.className = "highlighted";
-		span.style.color = options.foreground;
 		span.style.backgroundColor = options.background;
 
 		var highlighted = node.splitText(pos);
@@ -18,6 +17,18 @@ function keywordsHighlighter(options, remove) {
 		highlighted.parentNode.replaceChild(span, highlighted);
 
 		occurrences++;
+	}
+
+	function highlightGenders(node, pos, keyword, gender) {
+		if (gender == "male") {
+			highlight(node, pos, keyword, {"background": "#0000CC"}); 
+		}
+		else if (gender == "female") {
+			highlight(node, pos, keyword, {"background": "#CC0000"}); 
+		}
+		else {
+			highlight(node, pos, keyword, {"background": "#00CC00"}); 
+		}
 	}
 
 	function addHighlights(node, keywords, options) {
@@ -56,9 +67,21 @@ function keywordsHighlighter(options, remove) {
 		removeHighlights(document.body);
 	}
 
-	var keywords = options.keywords.split(",");
-	delete options.keywords;
-	addHighlights(document.body, keywords, options);
+	// make a call to the api
+	// make the call usaing an ajax function callback
+	// in that function callback make it highlight shit
+
+	function(apiurl, texts) {
+
+		for keywords in response.keys
+			addHighlights(document.body, keywords, options);
+
+
+		xhttp.open("POST", apiurl, true);
+		xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		xhttp.send("fname=Henry&lname=Ford");
+
+	}("http://name-extractor-api.herokuapp.com/extract-names/", document.body.textContent || document.body.innerText);
 
 	chrome.runtime.sendMessage({
 		"message": "showOccurrences",
@@ -66,16 +89,11 @@ function keywordsHighlighter(options, remove) {
 	});
 }
 
+
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	if ("returnOptions" == request.message) {
 		if ("undefined" != typeof request.keywords && request.keywords) {
-			keywordsHighlighter({
-					"keywords": request.keywords,
-					"foreground": request.foreground,
-					"background": request.background
-				},
-				request.remove
-			);
+			keywordsHighlighter(request.remove);
 		}
 	}
 });

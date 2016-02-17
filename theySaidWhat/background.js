@@ -9,14 +9,16 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 					if ("undefined" != typeof tabs[0].id && tabs[0].id) {
 						var showOccurrences = localStorage.getItem("showOccurrences");
 						showOccurrences = "true" == showOccurrences || null == showOccurrences;
+						var femalecolor = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
+						var malecolor = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
+						var genderunknown = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
 
 						chrome.tabs.sendMessage(tabs[0].id, {
 							"message": "returnOptions",
 							"remove": request.remove,
-							"keywords": localStorage.getItem("keywords"),
-							"foreground": localStorage.getItem("foreground") || "#000000",
-							"background": localStorage.getItem("background") || "#ffff00",
-							"showOccurrences": showOccurrences
+							"femalecolor": femalecolor,
+							"malecolor": malecolor,
+							"genderunknown": genderunknown,
 						});
 					}
 				}
