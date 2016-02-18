@@ -1,4 +1,5 @@
 {
+<<<<<<< Updated upstream
 	"manifest_version": 2,
 	"name": "Gender Analyzer",
   	"description": "Will highlight all the names on a page and estimate which gender they belong to.",
@@ -21,3 +22,33 @@
 	}
 	//"options_page": "options.html"
 }
+=======
+  "manifest_version": 2,
+  "name": "Gender analyzer",
+  "description": "Will highlight all the names on a page and estimate which gender they belong to.",
+  "version": "0.1",
+  "browser_action": {
+    "default_icon": "images/icon.png",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "scripts": [
+      "js/background.js"
+    ]
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": [
+        "js/content.js"
+      ],
+      "css": [
+        "css/highlighted.css"
+      ]
+    }
+  ],
+  "permissions": [
+    "tabs"
+  ]
+}
+>>>>>>> Stashed changes
