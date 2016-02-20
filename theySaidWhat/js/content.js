@@ -17,7 +17,7 @@ function genderHighlighter(remove) {
     span.appendChild(highlightedClone);
     highlighted.parentNode.replaceChild(span, highlighted);
 
-    occurrences++;
+    //occurrences++;
   }
 
   function getColorForGender(gender) {
@@ -25,7 +25,7 @@ function genderHighlighter(remove) {
 
     // first generate a consistent hash of the gender
     var hash = 0, i, chr, len;
-    if (gender.length === 0) return hash;
+    if (gender.length == 0) return hash;
     for (i = 0, len = gender.length; i < len; i++) {
       chr   = gender.charCodeAt(i);
       hash  = ((hash << 5) - hash) + chr;
@@ -35,8 +35,16 @@ function genderHighlighter(remove) {
     // then lets turn it into a hex string.
     var hashString = hash.toString(16);
 
+    // sometimes like negative numbers and stuff.
+    if (hashString[0] == "-") {
+      hashString = hashString.substring(1);
+    }
+
     // let's pad it with leading zeroes as needed to be 6 long for color
     while (hashString.length < 6) hashString = "0" + hashString;
+
+    // let's unpad it if we need to
+    if (hashString.length > 6) hashString = hashString.substring(0, 6);
 
     // add the expected # in the front
     colorString = "#" + hashString;
@@ -46,28 +54,48 @@ function genderHighlighter(remove) {
 
   function addHighlights(node, name_map) {
     // node: document node to start at
-    // name_map: map of {name: gender, ...}
-
+    // name_map: {
+//   "names": [
+//     {
+//       "gender": "",
+//       "name": "Allie Meng"
+//     },
+//     {
+//       "gender": "female",
+//       "name": "Mary"
+//     },
+//     {
+//       "gender": "male",
+//       "name": "Aditya Natraj"
+//     }
+//   ]
+// }
     var skip = 0;
 
     var i;
+    //nodetypes text = 3; element = 1; attribute = 2; commnent = 8
     if (3 == node.nodeType) {
-      for (name in name_map) {
-        gender = name_map[name];
-        color = getColorForGender(gender);
+      namearray = name_map.names;
+      
+      for (i=0; i<namearray.length; i++) {
 
-        var pos = node.data.toLowerCase.indexOf(name);
+        gender = namearray[i].gender;
+        color = getColorForGender(namearray[i].gender);
+      
+        var pos = node.data.toLowerCase().indexOf(namearray[i].name.toLowerCase());
         if (0 <= pos) {
-          color_options = { "foreground": color, "background": "#FBDE0F" };
-          highlight(node, pos, name, color_options);
+          color_options = { "foreground": "#FBDE0F", "background": color };
+          highlight(node, pos, namearray[i].name, color_options);
           skip = 1;
         }
       }
 
     }
+
     else if (1 == node.nodeType && !/(script|style|textarea)/i.test(node.tagName) && node.childNodes) {
       for (i = 0; i < node.childNodes.length; i++) {
-        i += addHighlights(node.childNodes[i], keywords, options);
+        //console.log("not ending the recursion");
+        i += addHighlights(node.childNodes[i], name_map);
       }
     }
 
@@ -82,36 +110,36 @@ function genderHighlighter(remove) {
   }
 
   function getGenderMapForPageText(text) {
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState == 4 && xhr.status == 200) {
-          addHighlights(document.body, JSON.parse(xhr.responseText));
-          // TODO: fill the table in the popup here
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (xhttp.readyState == 4 && xhttp.status == 200) {
+        console.log(xhttp.responseText);
+        addHighlights(document.body, JSON.parse(xhttp.responseText));
       }
-    }
-
-    xhr.open("POST", "http://name-extractor-api.herokuapp.com/extract-names/", true);
-    xhr.setRequestHeader("Content-Type", "application/json");
-    request_body = JSON.stringify({"text":text});
-    xhr.send(request_body)
-
+    };
+    xhttp.open("POST","https://name-extractor-api.herokuapp.com/extract-names/", true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    //xhttp.send(JSON.stringify({"text": text}));
+    xhttp.send('{"text": "Julie Bowen"}');
   }
 
   if (remove) {
     removeHighlights(document.body);
-  } else {
-    var pageText = document.body.textContent || document.body.innerText;
-    if ("undefined" != pageText) {
-      getGenderMapForPageText(pageText);
-    }  
   }
+
+
+
+  var pageText = document.body.textContent || document.body.innerText;
+  if ("undefined" != pageText) {
+    //addHighlights(document.body, {"premium":"male"});
+    getGenderMapForPageText(pageText);
+  }  
 }
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if ("returnOptions" == request.message) {
-    if ("undefined" != typeof request.keywords && request.keywords) {
       genderHighlighter(request.remove);
-    }
   }
 });
 
