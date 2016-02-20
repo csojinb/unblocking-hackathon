@@ -279,3 +279,9 @@ _Think small! The narrower the scope, the easier to reuse or adapt_
 ---
 
 # Questions?
+
+---
+
+# Learn more about Picwell!
+## [nerds.picwell.com](http://nerds.picwell.com)
+## @picwell
