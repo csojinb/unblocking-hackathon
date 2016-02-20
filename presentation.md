@@ -282,6 +282,6 @@ _Think small! The narrower the scope, the easier to reuse or adapt_
 
 ---
 
-# Learn more about Picwell!
+## Slides: github.com/picwell/unblocking-hackathon/
 ## [nerds.picwell.com](http://nerds.picwell.com)
 ## @picwell
